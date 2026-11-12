@@ -1,0 +1,41 @@
+# Terraform: local working data and state (state can contain secrets)
+**/.terraform/*
+*.tfstate
+*.tfstate.*
+crash.log
+crash.*.log
+*.tfplan
+tfplan
+
+# Terraform: variable files may hold sensitive values. Commit *.tfvars.example only.
+*.tfvars
+*.tfvars.json
+
+# Terraform: local override files and CLI config
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+.terraformrc
+terraform.rc
+
+# Credentials and secrets
+*.pem
+*.key
+*.p12
+.env
+.env.*
+service-account*.json
+*-credentials.json
+application_default_credentials.json
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+
+# OS and editors
+Thumbs.db
+.DS_Store
+.idea/

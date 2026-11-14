@@ -1,7 +1,7 @@
 # 0002: Terraform state management
 
 - Status: Accepted (not yet implemented; local state in use)
-- Date: 2026-11-15
+- Date: 2026-11-15 (trial and migration details added)
 
 ## Context
 
@@ -23,6 +23,9 @@ Local state has no locking or sharing and is lost with the disk.
   access boundary for all environments.
 - HCP Terraform: adds an external dependency and account.
 - Local state only: no locking and no CI use.
+- One central state project with per-environment access: stops an
+  environment's CI identity from administering its own state, but adds a
+  project and bootstrap step. Not needed while only dev is deployed.
 
 ## Consequences
 
@@ -30,3 +33,8 @@ Local state has no locking or sharing and is lost with the disk.
 - Losing bootstrap state means re-importing or recreating the bucket.
 - State buckets draw on the same small free storage allowance.
 - Teardown order: destroy the environment first, then its state bucket.
+- A Free Trial account ends after 90 days or when the $300 credit is spent.
+  The billing account then closes, resources stop, and a 30-day grace period
+  follows before permanent deletion. State buckets in trial projects are
+  therefore at risk, and cloud evidence must be captured before then.
+- Moving from local to GCS state uses `terraform init -migrate-state`.

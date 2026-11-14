@@ -1,3 +1,12 @@
+variable "project_id" {
+  type        = string
+  description = "GCP project ID that this environment deploys into."
+
+  validation {
+    condition     = can(regex("^[a-z][a-z0-9-]{4,28}[a-z0-9]$", var.project_id))
+    error_message = "project_id must be 6-30 characters: lowercase letters, digits and hyphens, starting with a letter and not ending with a hyphen."
+  }
+}
 variable "region" {
   type        = string
   description = "GCP region for this environment (free-tier US regions only)."

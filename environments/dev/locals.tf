@@ -1,7 +1,9 @@
 locals {
+  environment = "dev"
+
   common_labels = {
     project     = "infragrid"
-    environment = var.environment
+    environment = local.environment
     managed_by  = "terraform"
   }
 }

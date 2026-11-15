@@ -12,7 +12,7 @@ locals {
 resource "google_service_account" "this" {
   for_each = var.service_accounts
 
-  account_id   = "${var.name_prefix}-${each.key}-sa"
+  account_id   = "${var.name_prefix}-${each.key}-svc"
   display_name = "${var.name_prefix} ${each.key}"
   description  = each.value.description
 }

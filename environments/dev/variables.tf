@@ -23,3 +23,20 @@ variable "region" {
     error_message = "region must be a free-tier region: us-west1, us-central1 or us-east1."
   }
 }
+
+variable "zone" {
+  type        = string
+  description = "Zone of the VM. Must be inside the chosen region."
+  default     = "us-central1-a"
+
+  validation {
+    condition     = startswith(var.zone, "${var.region}-")
+    error_message = "zone must be inside the chosen region."
+  }
+}
+
+variable "subnet_cidr" {
+  type        = string
+  description = "IPv4 range of the dev subnet. Environments use distinct ranges so they never overlap."
+  default     = "10.10.0.0/24"
+}

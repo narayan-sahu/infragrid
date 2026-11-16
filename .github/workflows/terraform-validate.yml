@@ -43,3 +43,6 @@ jobs:
 
       - name: Validate
         run: terraform -chdir=environments/dev validate
+
+      - name: Run root tests
+        run: terraform -chdir=environments/dev test

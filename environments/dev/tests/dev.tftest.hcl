@@ -1,36 +1,48 @@
 mock_provider "google" {}
 mock_provider "random" {}
 
-override_resource {
-  target          = random_id.bucket_suffix
-  override_during = plan
-  values = {
-    hex = "a1b2c3"
-  }
-}
-
-override_resource {
-  target          = module.iam.google_service_account.this["vm"]
-  override_during = plan
-  values = {
-    email = "ig-dev-vm-sa@infragrid-dev-test1.iam.gserviceaccount.com"
-  }
-}
-
-override_resource {
-  target          = module.networking.google_compute_subnetwork.main
-  override_during = plan
-  values = {
-    self_link = "https://www.googleapis.com/compute/v1/projects/infragrid-dev-test1/regions/us-central1/subnetworks/ig-dev-subnet-main"
-  }
-}
-
 variables {
   project_id = "infragrid-dev-test1"
 }
 
+# No overrides: computed values (service account email, subnet link, bucket
+# suffix) are unknown here, so this run proves the composition plans with
+# unknown values, including the static-key object_access design.
+run "plans_with_unknown_values" {
+  command = plan
+
+  assert {
+    condition     = output.vm_name == "ig-dev-vm-01"
+    error_message = "The VM name must not depend on computed values."
+  }
+}
+
 run "dev_composes_all_modules" {
   command = plan
+
+  override_resource {
+    target          = random_id.bucket_suffix
+    override_during = plan
+    values = {
+      hex = "a1b2c3"
+    }
+  }
+
+  override_resource {
+    target          = module.iam.google_service_account.this["vm"]
+    override_during = plan
+    values = {
+      email = "ig-dev-vm-sa@infragrid-dev-test1.iam.gserviceaccount.com"
+    }
+  }
+
+  override_resource {
+    target          = module.networking.google_compute_subnetwork.main
+    override_during = plan
+    values = {
+      self_link = "https://www.googleapis.com/compute/v1/projects/infragrid-dev-test1/regions/us-central1/subnetworks/ig-dev-subnet-main"
+    }
+  }
 
   assert {
     condition     = output.vm_name == "ig-dev-vm-01"
@@ -48,6 +60,16 @@ run "rejects_project_from_another_environment" {
 
   variables {
     project_id = "infragrid-run-test1"
+  }
+
+  expect_failures = [var.project_id]
+}
+
+run "rejects_malformed_project_id" {
+  command = plan
+
+  variables {
+    project_id = "BAD_ID"
   }
 
   expect_failures = [var.project_id]

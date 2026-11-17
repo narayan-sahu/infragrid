@@ -28,6 +28,7 @@ terraform.rc
 service-account*.json
 *-credentials.json
 application_default_credentials.json
+gha-creds-*.json
 
 # Python
 __pycache__/

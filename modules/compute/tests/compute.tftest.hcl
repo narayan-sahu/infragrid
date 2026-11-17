@@ -186,4 +186,3 @@ run "rejects_invalid_name_prefix" {
 
   expect_failures = [var.name_prefix]
 }
-#

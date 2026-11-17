@@ -176,3 +176,13 @@ run "rejects_invalid_boot_image" {
 
   expect_failures = [var.boot_image]
 }
+
+run "rejects_invalid_name_prefix" {
+  command = plan
+
+  variables {
+    name_prefix = "IG_DEV"
+  }
+
+  expect_failures = [var.name_prefix]
+}

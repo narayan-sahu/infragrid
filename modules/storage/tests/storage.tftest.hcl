@@ -172,3 +172,23 @@ run "rejects_zero_retention" {
 
   expect_failures = [var.noncurrent_version_retention_days]
 }
+
+run "rejects_invalid_name_prefix" {
+  command = plan
+
+  variables {
+    name_prefix = "IG_DEV"
+  }
+
+  expect_failures = [var.name_prefix]
+}
+
+run "rejects_invalid_purpose" {
+  command = plan
+
+  variables {
+    purpose = "Bad Purpose"
+  }
+
+  expect_failures = [var.purpose]
+}

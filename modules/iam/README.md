@@ -39,6 +39,7 @@ Never creates service account keys.
   through the security exception process.
 - Grants are additive (`google_project_iam_member`), so they never replace
   other principals' access.
+ - The deny list blocks basic and IAM-administration roles only. Other broad roles, such as storage or compute admin, are not blocked here. A policy for  this is planned for Phase 7.
 
 ## Notes
 

@@ -42,14 +42,19 @@ change updates the README in the same PR.
 ## Testing
 
 - Unit tests use `terraform test` with `mock_provider "google" {}`.
-- Every `run` block states `command` explicitly. The default is `apply`.
+- Every `run` block states `command` explicitly. The default is `apply`.## Testing
+
+- Unit tests use `terraform test` with `mock_provider "google" {}`.
+- Every `run` block states `command` explicitly, because the default is
+  `apply`. Unit tests use `command = plan`.
 - Each validation rule has one passing and one failing case, the failing one
   using `expect_failures`.
-- Assertions check configuration (names, flags, labels), not provider-computed
-  values.
+- Assertions check configuration (names, flags, roles). Provider-computed
+  values are supplied with `override_resource` and `override_during = plan`.
 - Mock tests prove module logic and validation. They do not prove that GCP
-  accepts the configuration. That is covered by real-cloud tests (Phase 10).
-- Real-cloud tests do not live in `modules/*/tests/`.
+  accepts the configuration. Real-cloud tests are separate (Phase 10) and do
+  not live in `modules/*/tests/`.
+- See ADR 0004 for the reasoning.
 
 ## Linting
 

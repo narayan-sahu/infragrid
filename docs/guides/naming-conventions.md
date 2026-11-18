@@ -53,7 +53,7 @@ as VPC networks and firewall rules, do not support labels.
 
 ## Git and CI
 
-- Branches: `feature/`, `fix/`, `docs/`, `chore/` + short hyphenated name.
+- Branches: `feature/`, `fix/`, `docs/`, `chore/`, `ci/` and `test/` (throwaway negative tests, never merged) + short hyphenated name.
 - Commits: Conventional Commits, for example
   `feat(terraform): add networking module`.
   Types: feat, fix, docs, chore, ci, test, refactor.

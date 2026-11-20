@@ -2,6 +2,7 @@
 
 - Status: Accepted
 - Date: 2026-11-15
+- Amended: 2026-11-16 (roots now call the composition module, see ADR 0005)
 
 ## Context
 

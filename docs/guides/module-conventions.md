@@ -32,6 +32,7 @@ Add `locals.tf` or `data.tf` only when a module needs them.
 - No `prevent_destroy`, because every environment must be destroyable.
 - No `depends_on` unless an implicit reference cannot express the ordering.
   Comment why when used.
+- Exception: `modules/environment` is the only module that knows environment names. It owns every per-environment setting.
 
 ## Documentation
 

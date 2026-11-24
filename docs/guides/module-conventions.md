@@ -28,11 +28,12 @@ Add `locals.tf` or `data.tf` only when a module needs them.
 - Secure by default: no external IP, uniform bucket-level access, no public
   access.
 - Flags that make teardown harder or easier default to the safe value, and
-  the dev root overrides them deliberately.
+  the environment module sets them per environment.
 - No `prevent_destroy`, because every environment must be destroyable.
 - No `depends_on` unless an implicit reference cannot express the ordering.
   Comment why when used.
-- Exception: `modules/environment` is the only module that knows environment names. It owns every per-environment setting.
+- Exception: `modules/environment` is the only module that knows
+  environment names. It owns every per-environment setting.
 
 ## Documentation
 
@@ -41,9 +42,6 @@ minimal usage example. The tables are maintained by hand, so any interface
 change updates the README in the same PR.
 
 ## Testing
-
-- Unit tests use `terraform test` with `mock_provider "google" {}`.
-- Every `run` block states `command` explicitly. The default is `apply`.## Testing
 
 - Unit tests use `terraform test` with `mock_provider "google" {}`.
 - Every `run` block states `command` explicitly, because the default is

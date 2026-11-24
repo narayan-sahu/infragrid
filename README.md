@@ -8,19 +8,20 @@ enforcement, drift detection and cost governance.
 
 ## Status
 
-No infrastructure has been deployed to GCP. Everything below marked
-"Implemented" is validated locally and in CI with mock providers only.
+No infrastructure has been deployed to GCP. Everything marked "Implemented"
+is validated locally and in CI with mock providers only.
 
 | Component | State |
 |---|---|
 | Repository standards, PR template, pre-commit hooks | Implemented |
 | Modules: networking, iam, storage, compute (unit tests with mock providers) | Implemented |
-| `environments/dev` composing the four modules | Implemented, plan-tested with mock providers. Not applied. |
+| `modules/environment`: composes the four modules and holds per-environment settings | Implemented |
+| Roots `environments/dev`, `test`, `run` (plan-tested with mock providers) | Implemented, not applied |
 | GitHub Actions: pre-commit, terraform-test, terraform-validate, tflint | Implemented |
-| Architecture decisions (ADR 0001-0004) | Written |
+| Architecture decisions (ADR 0001-0005), guides, project setup runbook | Written |
 | First real deployment of `dev` | Planned (needs a cost review and approval) |
-| `test` and `run` environment roots | Planned |
 | Checkov scanning, OPA/Conftest policies | Planned |
+| Plan and apply workflows, cloud authentication | Planned |
 | Drift detection, Infracost cost estimates | Planned |
 
 ## Environments
@@ -31,7 +32,7 @@ No infrastructure has been deployed to GCP. Everything below marked
 | `test` | Lower environment | Validated only |
 | `run` | Production-style environment | Validated only |
 
-Each environment gets its own root configuration, state and GCP project.
+All three roots call `modules/environment`. See `docs/guides/environments.md`.
 
 ## Cost approach
 
@@ -51,12 +52,14 @@ Prerequisites: Git, Terraform 1.17 or newer, Python (for pre-commit), TFLint.
     terraform validate
     terraform test
 
+Repeat the last four commands in `environments/test` and `environments/run`.
 Each module runs its own tests with `terraform test` from its directory.
 
 ## Repository layout
 
-- `environments/dev/`: root configuration composing the modules
-- `modules/`: networking, iam, storage, compute
+- `environments/`: dev, test and run root configurations
+- `modules/`: networking, iam, storage, compute and the environment module
 - `docs/decisions/`: architecture decision records
-- `docs/guides/`: naming and module conventions
+- `docs/guides/`: naming, module and environment guides
+- `docs/runbooks/`: operational runbooks
 - `.github/workflows/`: CI workflows

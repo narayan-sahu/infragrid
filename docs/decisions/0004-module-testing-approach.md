@@ -2,7 +2,7 @@
 
 - Status: Accepted
 - Date: 2026-11-15
-- Amended: 2026-11-16 (evidence and technique added)
+- Amended: 2026-11-24 (evidence updated)
 
 ## Context
 
@@ -22,10 +22,11 @@ cloud account or cost. Terraform provides native tests with mock providers
 
 ## Evidence
 
-Local runs of the module suites passed with a mock Google provider and no
-GCP account: networking 6, iam 9, compute 13 and the dev root 4 runs. The
-iam suite includes a run that uses `override_during = plan`. Module tests
-also run in CI on GitHub-hosted runners, which have no GCP credentials.
+Local runs passed with a mock Google provider and no GCP account:
+networking 7, iam 9, storage 14, compute 14, environment 10, and 3 each for
+the dev, test and run roots (63 runs). The iam, environment and root suites
+use `override_during = plan`. The environment and root suites include a run
+without overrides, which plans with unknown computed values.
 
 ## Alternatives considered
 

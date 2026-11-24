@@ -192,3 +192,18 @@ run "rejects_invalid_purpose" {
 
   expect_failures = [var.purpose]
 }
+
+
+run "exposes_effective_settings" {
+  command = plan
+
+  variables {
+    force_destroy                     = true
+    noncurrent_version_retention_days = 30
+  }
+
+  assert {
+    condition     = output.force_destroy == true && output.noncurrent_version_retention_days == 30
+    error_message = "The module outputs must report the settings it applied."
+  }
+}

@@ -12,3 +12,8 @@ output "iap_ssh_tag" {
   description = "Network tag that grants IAP SSH access to an instance."
   value       = var.iap_ssh_tag
 }
+
+output "subnet_cidr" {
+  description = "IPv4 range of the subnet."
+  value       = google_compute_subnetwork.main.ip_cidr_range
+}

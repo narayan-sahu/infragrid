@@ -23,6 +23,8 @@ named identities.
 |---|---|
 | `bucket_name` | Name of the bucket |
 | `bucket_self_link` | Self link of the bucket |
+| `force_destroy` | Whether the bucket may be deleted while non-empty |
+| `noncurrent_version_retention_days` | Days before non-current versions are deleted |
 
 ## Usage
 

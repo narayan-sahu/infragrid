@@ -82,3 +82,17 @@ run "rejects_invalid_tag" {
 
   expect_failures = [var.iap_ssh_tag]
 }
+
+
+run "exposes_the_configured_subnet_range" {
+  command = plan
+
+  variables {
+    subnet_cidr = "10.20.0.0/24"
+  }
+
+  assert {
+    condition     = output.subnet_cidr == "10.20.0.0/24"
+    error_message = "The subnet_cidr output must report the applied range."
+  }
+}

@@ -17,9 +17,10 @@ workflow must not be able to change production by accident.
 - Separate state and a separate GCP project per environment.
 - Terraform workspaces are not used for environment separation.
 - Only dev is deployed. Test and run are validated, not deployed.
-- Each root fixes its own environment name as a local value and requires its
-  project ID to start with `infragrid-<env>-`, so a root cannot be pointed at
-  another environment's project by changing an input.
+- Each root passes its own environment name, as a literal, to the
+  environment module and requires its project ID to start with
+  `infragrid-<env>-`, so a root cannot be pointed at another environment's
+  project by changing an input.
 
 ## Alternatives considered
 

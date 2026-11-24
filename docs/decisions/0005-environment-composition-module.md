@@ -31,7 +31,7 @@ rules such as the free-tier region list.
 - One more layer between a root and the resources.
 - A copy-paste mistake in a root (the wrong environment name) is still
   possible, because the module cannot see which directory called it. A CI
-  check will compare each root's environment name with its directory.
+  check compares each root's environment name with its directory.
 - Tests of the module cannot see inside child modules, so they check
   settings and guards through outputs.
 - Per-environment differences are reviewed in one file.

@@ -46,6 +46,6 @@ modules stay environment-agnostic.
 ## Notes
 
 - A root must pass the environment that matches its directory. A CI check
-  for this is planned.
+  compares each root's environment name with its directory.
 - Tests: `terraform test` from this directory. They use mock providers and
   need no credentials.

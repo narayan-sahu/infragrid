@@ -50,6 +50,35 @@ Not available yet. Before any real deployment of an environment:
 4. A separate CI identity (planned for the CI/CD phase).
 5. A manual, reviewed apply. Nothing applies automatically.
 
+## Promotion flow
+
+Only dev is deployed, so promotion is a Git flow and not a deployment
+pipeline:
+
+1. Change a module or a root on a branch and open a pull request.
+2. CI validates and tests all three roots and every module.
+3. After the merge, dev is applied by hand and verified (future, see above).
+4. Test and run stay validated-only until each is approved for deployment,
+   test before run.
+
+## What "production-style" means today
+
+The run environment differs from dev by its project ID prefix, its own subnet
+range, a bucket that cannot be force-destroyed and longer retention of old
+object versions. It does not have deletion protection (every environment must
+be destroyable), an approval gate (unavailable on a private repository on the
+Free plan, see below) or its own CI identity (planned).
+
+## Changing a provider version
+
+1. Change the `version` constraint in `versions.tf` in every module and root
+   that declares the provider.
+2. In each of the three roots run `terraform init -upgrade`, then
+   `terraform providers lock -platform=windows_amd64 -platform=linux_amd64`,
+   and commit the updated lock files.
+3. In each module run `terraform init -upgrade` and `terraform test`. Module
+   lock files are not committed.
+4. Run every check before opening the pull request.
 ## Known limits
 
 - On a private repository on GitHub's Free plan, failing checks do not block

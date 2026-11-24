@@ -19,17 +19,41 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  discover:
+    name: Discover modules
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    outputs:
+      modules: ${{ steps.list.outputs.modules }}
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: List module directories
+        id: list
+        run: |
+          list=$(find modules -mindepth 1 -maxdepth 1 -type d -printf '%f\n' | sort | jq -R . | jq -sc .)
+          echo "Modules: ${list}"
+          [ "${list}" != "[]" ]
+          echo "modules=${list}" >> "$GITHUB_OUTPUT"
+
   test-module:
     name: Test ${{ matrix.module }}
+    needs: discover
     runs-on: ubuntu-24.04
     timeout-minutes: 10
     strategy:
       fail-fast: false
       matrix:
-        module: [networking, iam, storage, compute, environment]
+        module: ${{ fromJSON(needs.discover.outputs.modules) }}
+    env:
+      MODULE: ${{ matrix.module }}
     steps:
       - name: Check out repository
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Check the module has unit tests
+        run: ls "modules/${MODULE}"/tests/*.tftest.hcl
 
       - name: Set up Terraform
         uses: hashicorp/setup-terraform@dfe3c3f87815947d99a8997f908cb6525fc44e9e # v4.0.1
@@ -38,10 +62,10 @@ jobs:
           terraform_wrapper: false
 
       - name: Initialize
-        run: terraform -chdir=modules/${{ matrix.module }} init -input=false
+        run: terraform -chdir="modules/${MODULE}" init -input=false
 
       - name: Validate
-        run: terraform -chdir=modules/${{ matrix.module }} validate
+        run: terraform -chdir="modules/${MODULE}" validate
 
       - name: Run unit tests
-        run: terraform -chdir=modules/${{ matrix.module }} test
+        run: terraform -chdir="modules/${MODULE}" test
